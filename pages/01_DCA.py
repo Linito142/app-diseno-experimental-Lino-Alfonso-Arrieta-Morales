@@ -16,6 +16,13 @@ from utils.anova_utils import (
     tukey,
     validar_dca,
 )
+from utils.diagnostico_utils import (
+    grafico_qq,
+    grafico_residuos_vs_ajustados,
+    prueba_levene,
+    prueba_shapiro,
+    residuos_y_ajustados,
+)
 
 
 @st.cache_data
@@ -140,7 +147,7 @@ f_critica = float(
     distribucion_f.ppf(1 - alfa, gl_tratamientos, gl_error)
 )
 
-pestanas = st.tabs(["Datos", "ANOVA", "Comparaciones", "Gráficos"])
+pestanas = st.tabs(["Datos", "ANOVA", "Comparaciones", "Gráficos", "Supuestos"])
 
 with pestanas[0]:
     st.subheader("Datos del experimento")
@@ -238,3 +245,70 @@ with pestanas[3]:
         title="Media por tratamiento",
     )
     st.plotly_chart(figura_medias, width="stretch")
+
+with pestanas[4]:
+    st.subheader("Diagnóstico de supuestos")
+    st.write(
+        "El ANOVA supone que los errores son aproximadamente normales, tienen "
+        "varianza similar entre tratamientos y son independientes."
+    )
+
+    try:
+        estadistico_shapiro, p_shapiro, conclusion_shapiro = prueba_shapiro(
+            modelo.resid, alfa
+        )
+        estadistico_levene, p_levene, conclusion_levene = prueba_levene(
+            datos,
+            columna_tratamiento,
+            columna_respuesta,
+            alfa,
+        )
+    except ValueError as error:
+        st.error(f"No fue posible completar el diagnóstico: {error}")
+    else:
+        tabla_supuestos = pd.DataFrame(
+            [
+                {
+                    "Prueba": "Shapiro-Wilk",
+                    "Estadístico": estadistico_shapiro,
+                    "p-valor": p_shapiro,
+                    "Conclusión": conclusion_shapiro,
+                },
+                {
+                    "Prueba": "Levene (centro en la mediana)",
+                    "Estadístico": estadistico_levene,
+                    "p-valor": p_levene,
+                    "Conclusión": conclusion_levene,
+                },
+            ]
+        )
+        st.dataframe(
+            tabla_supuestos.style.format(
+                {"Estadístico": "{:.4f}", "p-valor": "{:.4f}"}
+            ),
+            width="stretch",
+        )
+
+    st.markdown(
+        "- **Normalidad:** Shapiro-Wilk y el gráfico Q-Q ayudan a evaluar si los "
+        "residuos siguen aproximadamente una distribución normal.\n"
+        "- **Homogeneidad de varianzas:** Levene compara la dispersión de la "
+        "respuesta entre tratamientos; el gráfico de residuos frente a ajustados "
+        "ayuda a identificar cambios en esa dispersión.\n"
+        "- **Independencia:** no se determina con Shapiro-Wilk ni con Levene. "
+        "Se respalda mediante la asignación aleatoria de las unidades "
+        "experimentales y el manejo independiente de las observaciones."
+    )
+
+    residuos_ajustados = residuos_y_ajustados(modelo)
+    columna_residuos, columna_qq = st.columns(2)
+    with columna_residuos:
+        st.plotly_chart(
+            grafico_residuos_vs_ajustados(modelo),
+            width="stretch",
+        )
+    with columna_qq:
+        st.plotly_chart(
+            grafico_qq(residuos_ajustados["Residuos"]),
+            width="stretch",
+        )
