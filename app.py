@@ -1,4 +1,4 @@
-AUTOR = "Escribe aquí tu nombre"
+AUTOR = "Lino Alfonso Arrieta Morales"
 
 import pandas as pd
 import streamlit as st
