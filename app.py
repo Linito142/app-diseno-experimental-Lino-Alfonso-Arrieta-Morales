@@ -1,7 +1,8 @@
 import pandas as pd
 import streamlit as st
 
-AUTOR = "Escribe aquí tu nombre"
+AUTOR = "Lino Alfonso Arrieta Morales" 
+""
 
 st.set_page_config(
     page_title="App de Diseño Experimental",
