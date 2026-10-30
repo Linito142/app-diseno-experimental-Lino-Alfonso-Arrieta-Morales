@@ -1,78 +1,137 @@
-AUTOR = "Lino Alfonso Arrieta Morales"
-
-import pandas as pd
+```python
 import streamlit as st
+import pandas as pd
+
+# ============================================================
+# CONFIGURACIÓN DE LA APLICACIÓN
+# ============================================================
 
 st.set_page_config(
     page_title="App de Diseño Experimental",
     page_icon="🌱",
-    layout="wide",
+    layout="wide"
 )
 
-st.title("App de Diseño Experimental")
+# Nombre del autor
+AUTOR = "Lino Alfonso Arrieta Morales"
+
+
+# ============================================================
+# PORTADA
+# ============================================================
+
+st.title("Aplicación de Diseño Experimental")
+
 st.subheader("Ingeniería Agrícola – Universidad de Sucre")
+
 st.write(
-    "El diseño experimental permite planificar ensayos de campo de manera "
-    "ordenada para comparar tratamientos, controlar fuentes de variación y "
-    "obtener evidencia confiable que apoye las decisiones agrícolas."
+    """
+    Aplicación web educativa desarrollada con Python y Streamlit para
+    apoyar el análisis de diseños experimentales del curso de Diseño
+    Experimental del programa de Ingeniería Agrícola de la Universidad
+    de Sucre. Los resultados apoyan el aprendizaje y deben interpretarse
+    junto con los supuestos del diseño y la verificación del estudiante.
+    """
 )
 
-st.header("Módulos")
-modulos = [
+
+# ============================================================
+# MÓDULOS Y ESTADO
+# ============================================================
+
+st.header("Módulos y estado")
+
+datos_modulos = [
     {
-        "Diseño": "DCA — Diseño completamente al azar",
-        "Cuándo se usa": "Cuando las unidades experimentales son homogéneas.",
-        "Ejemplo agrícola": "Comparar cuatro secadores asignando al azar muestras de yuca.",
+        "Módulo": "DCA — Diseño completamente al azar",
         "Estado": "Disponible",
+        "Descripción": (
+            "Analiza un factor en unidades experimentales homogéneas; "
+            "incluye el ejemplo de humedad de yuca con cuatro secadores solares."
+        )
     },
     {
-        "Diseño": "DBCA — Diseño de bloques completos al azar",
-        "Cuándo se usa": "Cuando se puede agrupar la variación en bloques homogéneos.",
-        "Ejemplo agrícola": "Comparar fertilizantes agrupando parcelas por gradiente de fertilidad.",
+        "Módulo": "DBCA — Diseño en bloques completos al azar",
         "Estado": "En construcción",
+        "Descripción": (
+            "Controla una fuente conocida de variación mediante bloques."
+        )
     },
     {
-        "Diseño": "DCL — Diseño de cuadrado latino",
-        "Cuándo se usa": "Cuando se deben controlar dos fuentes de variación mediante filas y columnas.",
-        "Ejemplo agrícola": "Comparar variedades controlando gradientes de suelo en dos direcciones.",
+        "Módulo": "DCL — Diseño en cuadrado latino",
         "Estado": "En construcción",
+        "Descripción": (
+            "Controla dos fuentes de variación mediante filas y columnas."
+        )
     },
     {
-        "Diseño": "DPD — Diseño de parcelas divididas",
-        "Cuándo se usa": "Cuando los factores requieren distintos niveles de aleatorización.",
-        "Ejemplo agrícola": "Evaluar métodos de riego en parcelas principales y dosis de abono en subparcelas.",
+        "Módulo": "DPD — Diseño de parcelas divididas",
         "Estado": "En construcción",
+        "Descripción": (
+            "Organiza factores en parcelas principales y subparcelas."
+        )
     },
     {
-        "Diseño": "Factoriales",
-        "Cuándo se usa": "Cuando se estudian varios factores y sus posibles interacciones.",
-        "Ejemplo agrícola": "Comparar combinaciones de variedades de maíz y dosis de fertilizante.",
+        "Módulo": "Factoriales",
         "Estado": "En construcción",
+        "Descripción": (
+            "Estudia varios factores y sus interacciones."
+        )
     },
     {
-        "Diseño": "RSM — Metodología de superficie de respuesta",
-        "Cuándo se usa": "Cuando se busca modelar y optimizar una respuesta según niveles de factores.",
-        "Ejemplo agrícola": "Optimizar temperatura y flujo de aire para secar yuca.",
+        "Módulo": "RSM — Metodología de superficie de respuesta",
         "Estado": "En construcción",
-    },
+        "Descripción": (
+            "Modela y explora respuestas según factores cuantitativos."
+        )
+    }
 ]
-st.table(pd.DataFrame(modulos))
 
-st.header("Instrucciones de uso")
+df_modulos = pd.DataFrame(datos_modulos)
+
+st.table(df_modulos)
+
+
+# ============================================================
+# INSTRUCCIONES DE USO
+# ============================================================
+
+st.header("¿Cómo utilizar la aplicación?")
+
 st.markdown(
-    "1. Elige el módulo que corresponda al diseño de tu experimento.\n"
-    "2. Carga los datos con las variables y tratamientos requeridos.\n"
-    "3. Revisa los resultados y su interpretación.\n"
-    "4. Verifica los supuestos y compara los resultados con tu cálculo manual."
+    """
+    **1. Elegir el módulo:** seleccione el diseño experimental que desea estudiar.
+
+    **2. Cargar los datos:** ingrese o cargue los datos correspondientes al experimento.
+
+    **3. Revisar los resultados:** consulte las tablas, gráficos y pruebas estadísticas.
+
+    **4. Verificar e interpretar:** compare los resultados con su cálculo manual,
+    revise los supuestos y formule la conclusión agrícola.
+    """
 )
+
+
+# ============================================================
+# ADVERTENCIA ACADÉMICA
+# ============================================================
 
 st.warning(
     "Esta app apoya el aprendizaje. El estudiante interpreta los resultados, "
     "verifica supuestos y compara con su cálculo manual."
 )
 
-with st.sidebar:
-    st.header("Información del curso")
-    st.write(f"Autor: {AUTOR}")
-    st.write("Curso: Diseño Experimental")
-    st.write("Semestre: 2026-2")
+
+# ============================================================
+# BARRA LATERAL
+# ============================================================
+
+st.sidebar.title("Información del proyecto")
+
+st.sidebar.write(f"**Autor:** {AUTOR}")
+st.sidebar.write("**Curso:** Diseño Experimental")
+st.sidebar.write("**Programa:** Ingeniería Agrícola")
+st.sidebar.write("**Universidad:** Universidad de Sucre")
+st.sidebar.write("**Semestre:** 2026-2")
+```
+
